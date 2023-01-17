@@ -94,7 +94,7 @@ func (s *Subscription) delete(ctx context.Context) error {
 	}
 
 	var res *ua.DeleteSubscriptionsResponse
-	err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 
@@ -130,7 +130,7 @@ func (s *Subscription) MonitorWithContext(ctx context.Context, ts ua.TimestampsT
 	}
 
 	var res *ua.CreateMonitoredItemsResponse
-	err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 
@@ -170,7 +170,7 @@ func (s *Subscription) UnmonitorWithContext(ctx context.Context, monitoredItemID
 	}
 
 	var res *ua.DeleteMonitoredItemsResponse
-	err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 
@@ -212,7 +212,7 @@ func (s *Subscription) ModifyMonitoredItemsWithContext(ctx context.Context, ts u
 		ItemsToModify:      items,
 	}
 	var res *ua.ModifyMonitoredItemsResponse
-	err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 	if err != nil {
@@ -263,7 +263,7 @@ func (s *Subscription) SetTriggeringWithContext(ctx context.Context, triggeringI
 	}
 
 	var res *ua.SetTriggeringResponse
-	err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 	return res, err
@@ -360,7 +360,7 @@ func (s *Subscription) recreate_NeedsSubMuxLock(ctx context.Context) error {
 			SubscriptionIDs: []uint32{s.SubscriptionID},
 		}
 		var res *ua.DeleteSubscriptionsResponse
-		_ = s.c.SendWithContext(ctx, req, func(v interface{}) error {
+		_ = s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 			return safeAssign(v, &res)
 		})
 		dlog.Print("subscription deleted")
@@ -377,7 +377,7 @@ func (s *Subscription) recreate_NeedsSubMuxLock(ctx context.Context) error {
 		Priority:                    params.Priority,
 	}
 	var res *ua.CreateSubscriptionResponse
-	err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 	if err != nil {
@@ -420,7 +420,7 @@ func (s *Subscription) recreate_NeedsSubMuxLock(ctx context.Context) error {
 		}
 
 		var res *ua.CreateMonitoredItemsResponse
-		err := s.c.SendWithContext(ctx, req, func(v interface{}) error {
+		err := s.c.SendWithContext(ctx, req, func(v ua.Response) error {
 			return safeAssign(v, &res)
 		})
 		if err != nil {

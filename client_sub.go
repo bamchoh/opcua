@@ -42,7 +42,7 @@ func (c *Client) SubscribeWithContext(ctx context.Context, params *SubscriptionP
 	}
 
 	var res *ua.CreateSubscriptionResponse
-	err := c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 	if err != nil {
@@ -117,7 +117,7 @@ func (c *Client) transferSubscriptions(ctx context.Context, ids []uint32) (*ua.T
 	}
 
 	var res *ua.TransferSubscriptionsResponse
-	err := c.SendWithContext(ctx, req, func(v interface{}) error {
+	err := c.SendWithContext(ctx, req, func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 	return res, err
@@ -178,7 +178,7 @@ func (c *Client) sendRepublishRequests(ctx context.Context, sub *Subscription, a
 
 		debug.Printf("RepublishRequest: req=%s", debug.ToJSON(req))
 		var res *ua.RepublishResponse
-		err := c.SecureChannel().SendRequestWithContext(ctx, req, c.Session().resp.AuthenticationToken, func(v interface{}) error {
+		err := c.SecureChannel().SendRequestWithContext(ctx, req, c.Session().resp.AuthenticationToken, func(v ua.Response) error {
 			return safeAssign(v, &res)
 		})
 		debug.Printf("RepublishResponse: res=%s err=%v", debug.ToJSON(res), err)
@@ -542,7 +542,7 @@ func (c *Client) sendPublishRequest(ctx context.Context) (*ua.PublishResponse, e
 
 	dlog.Printf("PublishRequest: %s", debug.ToJSON(req))
 	var res *ua.PublishResponse
-	err := c.sendWithTimeout(ctx, req, c.publishTimeout(), func(v interface{}) error {
+	err := c.sendWithTimeout(ctx, req, c.publishTimeout(), func(v ua.Response) error {
 		return safeAssign(v, &res)
 	})
 	stats.RecordError(err)
